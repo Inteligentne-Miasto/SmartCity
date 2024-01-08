@@ -9,7 +9,12 @@ class Car:
         self.current = route[1]
         self.next = route[2]
         self.lane = None
+        self.index = None
         self.initialize()
+
+    def move(self):
+        # 
+        pass
 
     def initialize(self):
         road = self.previous.get_road(self.current)

@@ -21,6 +21,7 @@ class Road:
                 for i in range(len(lane.cars)):
                     if lane.cars[i] == None:
                         car.lane = lane
+                        car.index = i
                         lane.cars[i] = car
                         break
                 break

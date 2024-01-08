@@ -5,7 +5,8 @@ from config import *
 class Traffic:
     def __init__(self, lane, road):
         self.name = 'T'+str(lane)
-        self.location = road
+        self.road = road
+        # dodać self.intersection
         self.color = False
     
     def get_traffic(self):

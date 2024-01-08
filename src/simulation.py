@@ -40,6 +40,7 @@ class Simulation:
     def simulate(self):
 
         self.simulate_traffic()
+        
         self.simulate_cars()
 
         if self.cycel == CYCLE_TIME * 4:
@@ -48,6 +49,7 @@ class Simulation:
         self.cycel += 1
 
     def simulate_cars(self):
+        # sort list of cars
         pass
 
     def simulate_traffic(self):
