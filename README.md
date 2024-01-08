@@ -1,3 +1,3 @@
 # SmartCity
-pip install pygame
-python "simulation.py"
+`pip install pygame`
+`python "simulation.py"`
