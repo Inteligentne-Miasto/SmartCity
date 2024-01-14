@@ -23,9 +23,16 @@ class Road:
                         car.lane = lane
                         car.index = i
                         lane.cars[i] = car
-                        break
+                        return  
                 break
-    
+
+    def add_car_to_lane(self, car, lane_index):
+        if 0 <= lane_index < len(self.lanes):
+            lane = self.lanes[lane_index]
+            lane.add_car(car)
+        else:
+            print(f"Lane index {lane_index} is out of range for road {self.name}")
+            
     def draw(self, screen):
         for i in range(len(self.lanes)):
             self.lanes[i].draw(screen, self.x, self.y, i, self.direction)

@@ -14,6 +14,26 @@ class Lane:
         self.traffic = self.add_traffic()
         self.cars = [None for i in range(10)]
 
+    def add_car_to_last_index(self, car, last=False):
+        if last:
+            if self.cars[0] is None:
+                self.cars[0] = car
+                car.lane = self
+                car.index = 0
+                return True
+            else:
+                return False
+            
+            return None
+        # Check the last position in the lane's spots
+        if self.cars[-1] is None:
+            self.cars[-1] = car  # Place the car at the last position
+            car.lane = self
+            car.index = len(self.cars) - 1  # Index of the last position
+            return True  # Car added successfully
+        else:
+            return False
+    
     def add_traffic(self):
         traffic = Traffic(self, self.road)
         if self.previous.x == self.current.x == self.next.x:

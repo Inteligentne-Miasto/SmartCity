@@ -18,6 +18,7 @@ class Model:
         self.create_intersections()
         self.create_roads()
         self.create_cars()
+        print(tabulate(self.map))
 
     def create_grid(self):
         grid = []
@@ -76,19 +77,6 @@ class Model:
                     self.map[i][j] = road
                     self.roads.append(road)
 
-    # def create_cars(self):
-    #     strart = self.model[4][2]
-    #     master = self.model[2][2]
-    #     end = [self.model[2][0],
-    #             self.model[0][2],
-    #             self.model[2][4]]
-    #     for i in range(10):
-    #         for e in end:
-    #             route = [strart, master, e]
-    #             car = Car(route)
-    #             self.cars.append(car)
-    #     print(self.cars)
-
     def create_cars(self):
         for i in range(CAR_COUNTER):
             route = []
@@ -116,7 +104,7 @@ class Model:
                         route.append(next_intersection)
             car = Car(route)
             self.cars.append(car)
-        # print(self.cars)
+        print(self.cars)
     
     def randomize_starting_intersection(self):
         while True:

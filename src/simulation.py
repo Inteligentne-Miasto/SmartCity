@@ -14,10 +14,14 @@ class Simulation:
         self.running = True
         self.cycel = 0
         self.run()
+        
 
     def run(self):
         pygame.init()
         
+        # for car in self.cars:
+        #     car.move()
+
         while self.running:
 
             self.handle_events(pygame.event.get())
@@ -50,7 +54,13 @@ class Simulation:
 
     def simulate_cars(self):
         # sort list of cars
-        pass
+        # for car in self cars odpalamy move
+        # przed odpaleniem move sortujemy liste samochodow wzgledem indeksu ( najwpierw samochody najblizej skrzyzowania)
+        # w move samochod sprawdza czy moze sie ruszyc, jesli tak to sie rusza, jesli nie to nie
+        # pass
+
+        for car in self.cars:
+            car.move()
 
     def simulate_traffic(self):
         self.reset_traffic()
