@@ -25,6 +25,7 @@ class Road:
                         lane.cars[i] = car
                         return  
                 break
+        
 
     def add_car_to_lane(self, car, lane_index):
         if 0 <= lane_index < len(self.lanes):

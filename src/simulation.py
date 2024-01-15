@@ -19,9 +19,7 @@ class Simulation:
     def run(self):
         pygame.init()
         
-        # for car in self.cars:
-        #     car.move()
-
+    
         while self.running:
 
             self.handle_events(pygame.event.get())
