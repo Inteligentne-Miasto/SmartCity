@@ -51,14 +51,20 @@ class Simulation:
         self.cycel += 1
 
     def simulate_cars(self):
-        # sort list of cars
-        # for car in self cars odpalamy move
-        # przed odpaleniem move sortujemy liste samochodow wzgledem indeksu ( najwpierw samochody najblizej skrzyzowania)
-        # w move samochod sprawdza czy moze sie ruszyc, jesli tak to sie rusza, jesli nie to nie
-        # pass
+        for road in self.model.roads:
+            for lane in road.lanes:
+                # Gather all cars in the lane
+                cars_in_lane = [car for car in lane.cars if car is not None]
 
-        for car in self.cars:
-            car.move()
+                # Sort cars by their index (position in the lane)
+                sorted_cars = sorted(cars_in_lane, key=lambda car: car.index)
+              
+                # Move each car in the sorted order
+                for car in sorted_cars:
+                    car.move()
+
+        # for car in self.cars:
+        #     car.move()
 
     def simulate_traffic(self):
         self.reset_traffic()

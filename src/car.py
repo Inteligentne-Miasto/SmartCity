@@ -13,9 +13,8 @@ class Car:
         self.initialize()
 
     def move(self):
-        # print("move")
         # Removed redundant check for self.next as it's already handled below
-        print(f"self.index = {self.index} self.next = {self.next} self.route = {self.route}")
+        # print(f"self.index = {self.index} self.next = {self.next} self.route = {self.route}")
         if self.index == 0:
             if not self.can_proceed_based_on_traffic_light():
                 return  # Samochód czeka, jeśli światło jest czerwone
@@ -32,11 +31,14 @@ class Car:
                 self.update_position_on_board(next_lane)
 
         else:
-            if self.lane:
-                # Ruch samochodu w obrębie bieżącego pasa
+            # if self.lane:
+            if self.lane.cars[self.index - 1] is None:
                 self.lane.cars[self.index] = None
                 self.index -= 1
                 self.lane.cars[self.index] = self
+            else:
+                pass
+           
 
     def handle_final_movement(self):
         pass
@@ -70,11 +72,11 @@ class Car:
             return False
 
     def update_position_on_board(self, next_lane):
-        print(f"self.previous = {self.previous} self.route[0] = {self.route[0]} self.current = {self.current} self.next = {self.next} next_lane = {next_lane}")   
+        # print(f"self.previous = {self.previous} self.route[0] = {self.route[0]} self.current = {self.current} self.next = {self.next} next_lane = {next_lane}")   
  
-        if self.next is not None: #nie usuwaj samochodu z ostatniego pasa
-            if self.lane is not None and self.index is not None:
-                self.lane.cars[self.index] = None
+        # if self.next is not None: #nie usuwaj samochodu z ostatniego pasa
+        if self.lane is not None and self.index is not None:
+            self.lane.cars[self.index] = None
 
         if self.next is not None:      
             next_lane = self.find_next_lane(self.previous, self.current, self.next)
