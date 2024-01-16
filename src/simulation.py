@@ -9,6 +9,7 @@ class Simulation:
         self.map = self.model.map
         self.cars = self.model.cars
         self.traffics = self.model.traffics
+        self.traffic_smart = self.model.traffic_smart
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
@@ -19,17 +20,12 @@ class Simulation:
     def run(self):
         pygame.init()
         
-    
         while self.running:
-
             self.handle_events(pygame.event.get())
-
-
             # Do logical updates here.
             self.simulate()
 
             self.screen.fill("green")  # Fill the display with a solid color
-
             # Render the graphics here.
             self.draw()
 
@@ -65,14 +61,26 @@ class Simulation:
 
         # for car in self.cars:
         #     car.move()
+    def simulate_traffic_smart(self):
+        # for lane in self.traffic_smart:
+            
+        pass
+    
 
     def simulate_traffic(self):
         self.reset_traffic()
         for traffic in self.traffics[self.cycel//CYCLE_TIME % 4]:
+            # print(f"self.tracffics: {self.traffics}")
+            # print(f"self.trafic_smart: {self.traffic_smart}")
+            
             traffic.change_traffic()
 
     def reset_traffic(self):
         for t in self.traffics:
+            for traffic in t:
+                traffic.color = False 
+                
+        for t in self.traffic_smart:
             for traffic in t:
                 traffic.color = False 
 

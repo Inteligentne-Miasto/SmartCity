@@ -26,9 +26,20 @@ class Car:
                 prev_intersection, curr_intersection, next_intersection = self.previous, self.current, self.next
         
             next_lane = self.find_next_lane(prev_intersection, curr_intersection, next_intersection)
-            if next_lane:
-                self.update_position_coords(next_lane)
-                self.update_position_on_board(next_lane)
+            print(f"next_lane = {next_lane}")
+            if "X" in str(next_intersection):
+                #czy kończy trasę
+                if self.lane:
+                    self.lane.cars[self.index] = None
+            else:
+                #wiemy że następny pas istnieje
+                new_temp_prev , new_temp_curr, new_temp_next = self.get_temporary_new_coords(next_lane)
+                new_temp_lane = self.find_next_lane(new_temp_prev, new_temp_curr, new_temp_next, temp=True)
+                if new_temp_lane and new_temp_lane.cars[-1] is None:
+                    self.update_position_coords(next_lane)
+                    self.update_position_on_board(next_lane)
+
+            
 
         else:
             # if self.lane:
@@ -42,15 +53,13 @@ class Car:
 
     def handle_final_movement(self):
         pass
-        # poniższa opcja dodaje samochód do ostatniego pasa ruchu, ale w pozycji jakby startował i idzie odwrornie
-        # next_lane = self.find_next_lane(self.route[-3], self.route[-2], self.route[-1], last=True)
-        # self.update_position_on_board(next_lane)        
+        # ostatnie trzy skrzyżowania dają przedostatni pas ruchu
+        
 
     def can_proceed_based_on_traffic_light(self):
-        # Check if the lane has a traffic light
-        # print("can_proceed_based_on_traffic_light")
-        # print(f"self.lane = {self.lane} self.tlane.traffic = {self.lane.traffic} self.lane.traffic.get_traffic() = {self.lane.traffic.get_traffic()}")
-        if self.lane and self.lane.traffic:
+        if self.current == self.lane.model.middle_intersection:
+            return self.lane.traffic_smart.get_traffic()
+        elif self.lane and self.lane.traffic:
             # Return True if the traffic light color is green, False otherwise
             return self.lane.traffic.get_traffic()  # True for green, False for red
         else:
@@ -71,8 +80,19 @@ class Car:
             self.next = None
             return False
 
+    def get_temporary_new_coords(self, next_lane):
+        previous = self.current
+        current = self.next
+        try:
+            nextt = self.route[self.route.index(self.current) + 1]
+            next_index = self.route.index(self.current) + 2
+            nextt = self.route[next_index] if next_index < len(self.route) else None
+            print(f"temporary new coords = previous = {previous} current = {current} nextt = {nextt}")
+        except Exception as e:
+            nextt = None
+        return previous, current, nextt
+
     def update_position_on_board(self, next_lane):
-        # print(f"self.previous = {self.previous} self.route[0] = {self.route[0]} self.current = {self.current} self.next = {self.next} next_lane = {next_lane}")   
  
         # if self.next is not None: #nie usuwaj samochodu z ostatniego pasa
         if self.lane is not None and self.index is not None:
@@ -81,34 +101,27 @@ class Car:
         if self.next is not None:      
             next_lane = self.find_next_lane(self.previous, self.current, self.next)
             if next_lane is not None:
-                print(f"update_position_on_board next_lane = {next_lane} self.next = {self.next}")
+                # print(f"update_position_on_board next_lane = {next_lane} self.next = {self.next}")
                 next_lane.add_car_to_last_index(self)
         else:   
             self.handle_final_movement()
 
-    def find_next_lane(self, previous, current, next, last=False):
-        if last:
-            prev_intersection = str(previous).split(":",1)[1]
-            curr_intersection = str(current).split(":",1)[1]
-            # print(f"find lane next = {next}")
-            next_intersection = str(next).split(":",1)[1]
-            new_lane = "L:" + next_intersection + "-" + curr_intersection + "-" + prev_intersection
-        
-            current_road = self.current.get_road(self.previous)
-
-            road_lanes = [str(lane) for lane in current_road.lanes]
-            if new_lane in road_lanes:
-                # print("new_lane in road_lanes")
-                return current_road.lanes[road_lanes.index(new_lane)]
+    def find_next_lane(self, previous, current, next, temp=False):
 
 
         prev_intersection = str(previous).split(":",1)[1]
         curr_intersection = str(current).split(":",1)[1]
-        # print(f"find lane next = {next}")
         next_intersection = str(next).split(":",1)[1]
         new_lane = "L:" + prev_intersection + "-" + curr_intersection + "-" + next_intersection
       
-        current_road = self.current.get_road(self.previous)
+        if not temp:
+            print("not temp")
+            current_road = self.current.get_road(self.previous)
+        else:
+            print("temp")
+            print(f"self.current = {self.current} self.previous = {self.previous} self.next = {self.next}")
+            current_road = self.next.get_road(self.current)
+
 
         road_lanes = [str(lane) for lane in current_road.lanes]
         if new_lane in road_lanes:

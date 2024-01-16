@@ -15,7 +15,11 @@ class Model:
         self.roads = []
         self.cars = []
         self.traffics = [[],[],[],[]]
+        self.traffic_smart = [[],[],[],[]]
         self.create_intersections()
+
+        self.middle_intersection = self.map[self.size//2][self.size//2]
+
         self.create_roads()
         self.create_cars()
         print(tabulate(self.map))

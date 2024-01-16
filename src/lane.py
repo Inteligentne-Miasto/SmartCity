@@ -12,7 +12,12 @@ class Lane:
         self.next = next
         self.direction = self.get_direction()
         self.traffic = self.add_traffic()
+        self.traffic_smart = self.add_traffic_smart()
         self.cars = [None for i in range(10)]
+        self.currentCycle = 0
+        self.nr_cyklu = 0
+        # print(f"self.traffic: {self.traffic}")
+        # print(f"self.traffic_smart: {self.traffic_smart}")
 
     def add_car_to_last_index(self, car, last=False):
         if last:
@@ -34,35 +39,80 @@ class Lane:
         else:
             return False
     
+    def add_traffic_smart(self):
+        if self.current == self.model.middle_intersection:
+            traffic = Traffic(self, self.road)
+            if self.previous.x == self.current.x == self.next.x:
+                self.model.traffic_smart[0].append(traffic)
+                self.nr_cyklu = 0
+            elif self.previous.y == self.current.y == self.next.y:
+                self.model.traffic_smart[1].append(traffic)
+                self.nr_cyklu = 1
+            elif self.previous.x == self.current.x:
+                if self.previous.y > self.current.y:
+                    if self.next.x > self.current.x:
+                        self.model.traffic_smart[2].append(traffic)
+                        self.nr_cyklu = 2
+                    else:
+                        self.model.traffic_smart[3].append(traffic)
+                        self.nr_cyklu = 3
+                else:
+                    if self.next.x < self.current.x:
+                        self.model.traffic_smart[2].append(traffic)
+                        self.nr_cyklu = 2
+                    else:
+                        self.model.traffic_smart[3].append(traffic)
+                        self.nr_cyklu = 3
+            elif self.previous.y == self.current.y:
+                if self.previous.x > self.current.x:
+                    if self.next.y > self.current.y:
+                        self.model.traffic_smart[2].append(traffic)
+                        self.nr_cyklu = 2
+                    else:
+                        self.model.traffic_smart[3].append(traffic)
+                        self.nr_cyklu = 3
+                else:
+                    if self.next.y < self.current.y:
+                        self.model.traffic_smart[2].append(traffic)
+                        self.nr_cyklu = 2
+                    else:
+                        self.model.traffic_smart[3].append(traffic)
+                        self.nr_cyklu = 3
+            return traffic
+
     def add_traffic(self):
-        traffic = Traffic(self, self.road)
-        if self.previous.x == self.current.x == self.next.x:
-            self.model.traffics[0].append(traffic)
-        elif self.previous.y == self.current.y == self.next.y:
-            self.model.traffics[1].append(traffic)
-        elif self.previous.x == self.current.x:
-            if self.previous.y > self.current.y:
-                if self.next.x > self.current.x:
-                    self.model.traffics[2].append(traffic)
+        # if  self.current = M nie dodawaj lud bobdaj do self.model.trafic_smart
+        if not self.current == self.model.middle_intersection:
+            traffic = Traffic(self, self.road)
+            if self.previous.x == self.current.x == self.next.x:
+                self.model.traffics[0].append(traffic)
+                self.s = 0
+            elif self.previous.y == self.current.y == self.next.y:
+                self.model.traffics[1].append(traffic)
+            elif self.previous.x == self.current.x:
+                if self.previous.y > self.current.y:
+                    if self.next.x > self.current.x:
+                        self.model.traffics[2].append(traffic)
+                    else:
+                        self.model.traffics[3].append(traffic)
                 else:
-                    self.model.traffics[3].append(traffic)
-            else:
-                if self.next.x < self.current.x:
-                    self.model.traffics[2].append(traffic)
+                    if self.next.x < self.current.x:
+                        self.model.traffics[2].append(traffic)
+                    else:
+                        self.model.traffics[3].append(traffic)
+            elif self.previous.y == self.current.y:
+                if self.previous.x > self.current.x:
+                    if self.next.y > self.current.y:
+                        self.model.traffics[2].append(traffic)
+                    else:
+                        self.model.traffics[3].append(traffic)
                 else:
-                    self.model.traffics[3].append(traffic)
-        elif self.previous.y == self.current.y:
-            if self.previous.x > self.current.x:
-                if self.next.y > self.current.y:
-                    self.model.traffics[2].append(traffic)
-                else:
-                    self.model.traffics[3].append(traffic)
-            else:
-                if self.next.y < self.current.y:
-                    self.model.traffics[2].append(traffic)
-                else:
-                    self.model.traffics[3].append(traffic)
-        return traffic
+                    if self.next.y < self.current.y:
+                        self.model.traffics[2].append(traffic)
+                    else:
+                        self.model.traffics[3].append(traffic)
+            return traffic
+
 
     def get_direction(self):
         if self.previous.x == self.current.x:
@@ -95,7 +145,11 @@ class Lane:
             if self.cars[i] != None:
                 self.cars[i].draw(screen, x, y, i, self.direction)
         
-        self.traffic.draw(screen, x, y, self.direction)
+        if self.traffic != None:
+            self.traffic.draw(screen, x, y, self.direction)
+        else:
+            self.traffic_smart.draw(screen, x, y, self.direction)
+        # self.traffic.draw(screen, x, y, self.direction)
                 
     def __str__(self):
         return f'L:{self.previous.id}-{self.current.id}-{self.next.id}'
