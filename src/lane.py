@@ -12,10 +12,9 @@ class Lane:
         self.next = next
         self.direction = self.get_direction()
         self.traffic = self.add_traffic()
+        self.nr_cyklu = 0
         self.traffic_smart = self.add_traffic_smart()
         self.cars = [None for i in range(10)]
-        self.currentCycle = 0
-        self.nr_cyklu = 0
         # print(f"self.traffic: {self.traffic}")
         # print(f"self.traffic_smart: {self.traffic_smart}")
 
@@ -86,7 +85,6 @@ class Lane:
             traffic = Traffic(self, self.road)
             if self.previous.x == self.current.x == self.next.x:
                 self.model.traffics[0].append(traffic)
-                self.s = 0
             elif self.previous.y == self.current.y == self.next.y:
                 self.model.traffics[1].append(traffic)
             elif self.previous.x == self.current.x:

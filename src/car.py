@@ -26,7 +26,7 @@ class Car:
                 prev_intersection, curr_intersection, next_intersection = self.previous, self.current, self.next
         
             next_lane = self.find_next_lane(prev_intersection, curr_intersection, next_intersection)
-            print(f"next_lane = {next_lane}")
+            # print(f"next_lane = {next_lane}")
             if "X" in str(next_intersection):
                 #czy kończy trasę
                 if self.lane:
@@ -87,7 +87,7 @@ class Car:
             nextt = self.route[self.route.index(self.current) + 1]
             next_index = self.route.index(self.current) + 2
             nextt = self.route[next_index] if next_index < len(self.route) else None
-            print(f"temporary new coords = previous = {previous} current = {current} nextt = {nextt}")
+            # print(f"temporary new coords = previous = {previous} current = {current} nextt = {nextt}")
         except Exception as e:
             nextt = None
         return previous, current, nextt
@@ -115,11 +115,11 @@ class Car:
         new_lane = "L:" + prev_intersection + "-" + curr_intersection + "-" + next_intersection
       
         if not temp:
-            print("not temp")
+            # print("not temp")
             current_road = self.current.get_road(self.previous)
         else:
-            print("temp")
-            print(f"self.current = {self.current} self.previous = {self.previous} self.next = {self.next}")
+            # print("temp")
+            # print(f"self.current = {self.current} self.previous = {self.previous} self.next = {self.next}")
             current_road = self.next.get_road(self.current)
 
 

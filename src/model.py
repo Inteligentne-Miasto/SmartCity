@@ -108,7 +108,7 @@ class Model:
                         route.append(next_intersection)
             car = Car(route)
             self.cars.append(car)
-        print(self.cars)
+        # print(self.cars)
     
     def randomize_starting_intersection(self):
         while True:
